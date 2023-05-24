@@ -25,6 +25,8 @@ import Password from 'primevue/password';
 import InlineMessage from 'primevue/inlinemessage';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
+import TreeTable from 'primevue/treetable';
+import Column from 'primevue/column';
 
 const app = createApp(App)
 app.config.globalProperties.$appState = reactive({ theme: 'lara-light-indigo', darkTheme: false });
@@ -40,6 +42,8 @@ app.component('InputPassword', Password)
 app.component('InlineMessage', InlineMessage)
 app.component('PrimevueButton', Button)
 app.component('ProgressSpinner', ProgressSpinner)
+app.component('TreeTable', TreeTable)
+app.component('VueColumn', Column)
 
 app.directive('tooltip', Tooltip);
 app.directive('ripple', Ripple);
