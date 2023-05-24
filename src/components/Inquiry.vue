@@ -8,10 +8,44 @@
                 animationDuration=".5s" aria-label="Custom ProgressSpinner" />
         </div>
     </div>
-    <div v-if="bol">
-        {{ value }}
-        <TreeTable :value="test">
-            <VueColumn field="aaaaa" header="CountBetTotal" expander></VueColumn>
+    <div v-if="bol" class="card">
+        <TreeTable :value="value.root">
+            <VueColumn class="resultcolumn" field="TotalBet単勝" header="単勝" expander="true"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalBet複勝" header="複勝"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalBet馬連" header="馬連"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalBet枠連" header="枠連"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalBet馬単" header="馬単"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalBetワイド" header="ワイド"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalBet三連複" header="三連複"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalBet三連単" header="三連単"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalBet" header="Bet"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalReturn単勝" header="単勝"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalReturn複勝" header="複勝"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalReturn馬連" header="馬連"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalReturn枠連" header="枠連"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalReturn馬単" header="馬単"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalReturnワイド" header="ワイド"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalReturn三連複" header="三連複"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalReturn三連単" header="三連単"></VueColumn>
+            <VueColumn class="resultcolumn" field="TotalReturn" header="Return"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountBet単勝" header="単勝"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountBet複勝" header="複勝"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountBet馬連" header="馬連"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountBet枠連" header="枠連"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountBet馬単" header="馬単"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountBetワイド" header="ワイド"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountBet三連複" header="三連複"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountBet三連単" header="三連単"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountBetTotal" header="Total"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountReturn単勝" header="単勝"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountReturn複勝" header="複勝"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountReturn馬連" header="馬連"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountReturn枠連" header="枠連"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountReturn馬単" header="馬単"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountReturnワイド" header="ワイド"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountReturn三連複" header="三連複"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountReturn三連単" header="三連単"></VueColumn>
+            <VueColumn class="resultcolumn" field="CountReturnTotal" header="Total"></VueColumn>
         </TreeTable>
     </div>
 </template>
@@ -38,7 +72,7 @@ export default defineComponent({
         console.log(props.m)
         const inguiryload = ref(true)
         const value = ref()
-        const test = [{"aaaaa": 11}]
+
         const bol = ref(false)
         const inquiry = () => {
             inguiryload.value = false
@@ -46,15 +80,13 @@ export default defineComponent({
             axios.POST({ jsessionid: props.jsessionid, m: props.m })
                 .then((res: AxiosResponseClass) => {
                     inguiryload.value = true
-                    value.value = res.Data as unknown as JRADayBettingtohyoClass
-
+                    value.value = CreateTree(res.Data as unknown as JRADayBettingtohyoClass)
                     bol.value = true
                 })
         }
         return {
             inguiryload,
             inquiry,
-            test,
             value,
             bol,
         }
@@ -62,47 +94,48 @@ export default defineComponent({
 
 });
 function CreateTree(data: JRADayBettingtohyoClass) {
-    const tree = {
+    console.log(data)
+    return {
         "root": [
             {
                 key: "0",
                 data: {
-                    "TotalBet単勝": `${data.TotalBet単勝}`,
-                    "TotalBet複勝": `${data.TotalBet複勝}`,
-                    "TotalBet馬連": `${data.TotalBet馬連}`,
-                    "TotalBet枠連": `${data.TotalBet枠連}`,
-                    "TotalBet馬単": `${data.TotalBet馬単}`,
-                    "TotalBetワイド": `${data.TotalBetワイド}`,
-                    "TotalBet三連複": `${data.TotalBet三連複}`,
-                    "TotalBet三連単": `${data.TotalBet三連単}`,
-                    "TotalBet": `${data.TotalBet}`,
-                    "TotalReturn単勝": `${data.TotalReturn単勝}`,
-                    "TotalReturn複勝": `${data.TotalReturn複勝}`,
-                    "TotalReturn馬連": `${data.TotalReturn馬連}`,
-                    "TotalReturn枠連": `${data.TotalReturn枠連}`,
-                    "TotalReturn馬単": `${data.TotalReturn馬単}`,
-                    "TotalReturnワイド": `${data.TotalReturnワイド}`,
-                    "TotalReturn三連複": `${data.TotalReturn三連複}`,
-                    "TotalReturn三連単": `${data.TotalReturn三連単}`,
-                    "TotalReturn": `${data.TotalReturn}`,
-                    "CountBet単勝": `${data.CountBet単勝}`,
-                    "CountBet複勝": `${data.CountBet複勝}`,
-                    "CountBet馬連": `${data.CountBet馬連}`,
-                    "CountBet枠連": `${data.CountBet枠連}`,
-                    "CountBet馬単": `${data.CountBet馬単}`,
-                    "CountBetワイド": `${data.CountBetワイド}`,
-                    "CountBet三連複": `${data.CountBet三連複}`,
-                    "CountBet三連単": `${data.CountBet三連単}`,
-                    "CountBetTotal": `${data.CountBetTotal}`,
-                    "CountReturn単勝": `${data.CountReturn単勝}`,
-                    "CountReturn複勝": `${data.CountReturn複勝}`,
-                    "CountReturn馬連": `${data.CountReturn馬連}`,
-                    "CountReturn枠連": `${data.CountReturn枠連}`,
-                    "CountReturn馬単": `${data.CountReturn馬単}`,
-                    "CountReturnワイド": `${data.CountReturnワイド}`,
-                    "CountReturn三連複": `${data.CountReturn三連複}`,
-                    "CountReturn三連単": `${data.CountReturn三連単}`,
-                    "CountReturnTotal": `${data.CountReturnTotal}`
+                    "TotalBet単勝": `${data.totalBet単勝}`,
+                    "TotalBet複勝": `${data.totalBet複勝}`,
+                    "TotalBet馬連": `${data.totalBet馬連}`,
+                    "TotalBet枠連": `${data.totalBet枠連}`,
+                    "TotalBet馬単": `${data.totalBet馬単}`,
+                    "TotalBetワイド": `${data.totalBetワイド}`,
+                    "TotalBet三連複": `${data.totalBet三連複}`,
+                    "TotalBet三連単": `${data.totalBet三連単}`,
+                    "TotalBet": `${data.totalBet}`,
+                    "TotalReturn単勝": `${data.totalReturn単勝}`,
+                    "TotalReturn複勝": `${data.totalReturn複勝}`,
+                    "TotalReturn馬連": `${data.totalReturn馬連}`,
+                    "TotalReturn枠連": `${data.totalReturn枠連}`,
+                    "TotalReturn馬単": `${data.totalReturn馬単}`,
+                    "TotalReturnワイド": `${data.totalReturnワイド}`,
+                    "TotalReturn三連複": `${data.totalReturn三連複}`,
+                    "TotalReturn三連単": `${data.totalReturn三連単}`,
+                    "TotalReturn": `${data.totalReturn}`,
+                    "CountBet単勝": `${data.countBet単勝}`,
+                    "CountBet複勝": `${data.countBet複勝}`,
+                    "CountBet馬連": `${data.countBet馬連}`,
+                    "CountBet枠連": `${data.countBet枠連}`,
+                    "CountBet馬単": `${data.countBet馬単}`,
+                    "CountBetワイド": `${data.countBetワイド}`,
+                    "CountBet三連複": `${data.countBet三連複}`,
+                    "CountBet三連単": `${data.countBet三連単}`,
+                    "CountBetTotal": `${data.countBetTotal}`,
+                    "CountReturn単勝": `${data.countReturn単勝}`,
+                    "CountReturn複勝": `${data.countReturn複勝}`,
+                    "CountReturn馬連": `${data.countReturn馬連}`,
+                    "CountReturn枠連": `${data.countReturn枠連}`,
+                    "CountReturn馬単": `${data.countReturn馬単}`,
+                    "CountReturnワイド": `${data.countReturnワイド}`,
+                    "CountReturn三連複": `${data.countReturn三連複}`,
+                    "CountReturn三連単": `${data.countReturn三連単}`,
+                    "CountReturnTotal": `${data.countReturnTotal}`,
                 }
             }
         ]
@@ -112,7 +145,7 @@ function CreateTree(data: JRADayBettingtohyoClass) {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.InputNum {
-    margin-top: 10px;
+.resultcolumn{
+    font-size: 1px !important;
 }
 </style>
