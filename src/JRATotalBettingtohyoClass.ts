@@ -1,12 +1,16 @@
 import JRABettingRaceResultClass from "./JRABettingRaceResultClass"
-interface dictionary {
+export interface dictionary {
     readonly [key: string | number]: JRABettingRaceResultClass
 }
+export interface DicDayRascetohyo {
+    readonly [key: string | number]: dictionary
+}
 
-export default class JRADayBettingtohyoClass extends JRABettingRaceResultClass {
-    public dic: dictionary
+
+export default class JRATotalBettingtohyoClass extends JRABettingRaceResultClass {
+    public dic: DicDayRascetohyo
     public betrace: number
-    public hitrace: number
+    public hitrace:number
     constructor() {
         super()
         this.dic = {}
