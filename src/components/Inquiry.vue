@@ -15,8 +15,9 @@
             <VueColumn field="項目" header="項目" expander="true"></VueColumn>
             <VueColumn field="TotalBet" header="TotalBet" ></VueColumn>
             <VueColumn field="TotalReturn" header="TotalReturn"></VueColumn>
+            <VueColumn field="ReturnRate" header="ReturnRate"></VueColumn>
             <VueColumn field="CountBet" header="CountBet"></VueColumn>
-            <VueColumn field="CountReturn" header="CountReturn"></VueColumn>
+            <VueColumn field="HitRate" header="HitRate"></VueColumn>
         </TreeTable>
     </div>
 </template>
@@ -51,6 +52,7 @@ export default defineComponent({
                 .then((res: AxiosResponseClass) => {
                     inguiryload.value = true
                     value.value = res.Data as unknown as IFInquiryParentTreeNode
+                    console.log(res.Data)
                     bol.value = true
                 })
         }
