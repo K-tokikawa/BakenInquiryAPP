@@ -11,7 +11,7 @@
         </div>
     </div>
     <div v-if="bol" class="card">
-        <TreeTable :value="value.root">
+        <TreeTable :value="data.root">
             <VueColumn field="項目" header="項目" expander="true"></VueColumn>
             <VueColumn field="TotalBet" header="TotalBet" ></VueColumn>
             <VueColumn field="TotalReturn" header="TotalReturn"></VueColumn>
@@ -42,16 +42,19 @@ export default defineComponent({
         console.log(props.jsessionid)
         console.log(props.m)
         const inguiryload = ref(true)
-        const value = ref()
+        const data = ref()
+
+        const mindate = ref()
+        const maxdate = ref()
 
         const bol = ref(false)
         const inquiry = () => {
             inguiryload.value = false
             const axios: AxiosBase = new AxiosBase('http://localhost:9999/GetJRAtohyoData')
-            axios.POST({ jsessionid: props.jsessionid, m: props.m })
+            axios.POST({ jsessionid: props.jsessionid, m: props.m, mindate: mindate, maxdate: maxdate })
                 .then((res: AxiosResponseClass) => {
                     inguiryload.value = true
-                    value.value = res.Data as unknown as IFInquiryParentTreeNode
+                    data.value = res.Data as unknown as IFInquiryParentTreeNode
                     console.log(res.Data)
                     bol.value = true
                 })
@@ -59,7 +62,7 @@ export default defineComponent({
         return {
             inguiryload,
             inquiry,
-            value,
+            data,
             bol,
         }
     }
