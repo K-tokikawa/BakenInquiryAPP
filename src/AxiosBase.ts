@@ -1,5 +1,5 @@
 import axios from 'axios'
-import AxiosResponseClass from './AxiosResponseClass';
+import AxiosResponseClass from './class/AxiosResponseClass';
 
 axios.defaults.withCredentials = true;
 let URL: string;
@@ -7,24 +7,6 @@ export class AxiosBase {
     constructor(url: string) {
         URL = url;
         axios.defaults.withCredentials = true;
-
-    }
-    async POST_(param: object, option?: object) {
-        return await new Promise((resolve, reject) => {
-            axios.post(URL, param, option)
-                .then(response => {
-                    resolve(
-                        new AxiosResponseClass(
-                            response.data,
-                            response.headers,
-                            response.status
-                        ));
-                })
-                .catch((error) => {
-                    reject(error);
-                })
-        }
-        );
     }
 
     async POST(param: object, option?: object): Promise<AxiosResponseClass> {

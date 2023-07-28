@@ -1,4 +1,5 @@
 <template>
+    <router-link to="/Predict">Predict</router-link>
     <div>
         <div v-if="inguiryload">
             <div v-if="!bol">
@@ -25,7 +26,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { AxiosBase } from '@/AxiosBase';
-import AxiosResponseClass from '@/AxiosResponseClass';
+import AxiosResponseClass from '@/class/AxiosResponseClass';
 import {IFInquiryParentTreeNode} from '@/IF/IFInquiryTreeNode'
 
 export default defineComponent({
@@ -51,7 +52,7 @@ export default defineComponent({
         const inquiry = () => {
             inguiryload.value = false
             const axios: AxiosBase = new AxiosBase('http://localhost:9999/GetJRAtohyoData')
-            axios.POST({ jsessionid: props.jsessionid, m: props.m, mindate: mindate, maxdate: maxdate })
+            axios.POST({ jsessionid: props.jsessionid, m: props.m, mindate: '20230715', maxdate: '20230728' })
                 .then((res: AxiosResponseClass) => {
                     inguiryload.value = true
                     data.value = res.Data as unknown as IFInquiryParentTreeNode

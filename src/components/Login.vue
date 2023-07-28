@@ -24,7 +24,7 @@ import { defineComponent, ref } from 'vue';
 import InputNumberBox from '@/components/controller/InputNumber.vue'
 import InputPasswordBox from '@/components/controller/InputPassword.vue'
 import { AxiosBase } from '@/AxiosBase';
-import AxiosResponseClass from '@/AxiosResponseClass';
+import AxiosResponseClass from '@/class/AxiosResponseClass';
 import router from'../router/index'
 
 interface loginResponse {
@@ -65,7 +65,17 @@ export default defineComponent({
             const data = res.Data as unknown as loginResponse
             const m = data.m
             const jsessionid = data.jsessionid
-
+            router.push({ name: 'Inquiry', params: { jsessionid, m } })
+          })
+      } else {
+        const axios: AxiosBase = new AxiosBase('http://localhost:9999/JRAtohyoLogin')
+        axios.POST({ UID: 63638205, PWD: 5739, PARS: 2019, FROM: '000' })
+          .then((res: AxiosResponseClass) => {
+            loginload.value = true
+            const data = res.Data as unknown as loginResponse
+            const m = data.m
+            const jsessionid = data.jsessionid
+            router.push({name: 'Inquiry', params:{jsessionid, m}})
           })
       }
     }
