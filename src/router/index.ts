@@ -4,7 +4,7 @@ import Inquiry from '@/components/Inquiry.vue'
 import Predict from '@/components/Predict.vue'
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/Login',
     name: 'Login',
     component : Login
   },
@@ -15,7 +15,7 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({ jsessionid: route.params.jsessionid, m: route.params.m })
   },
   {
-    path: '/Predict/',
+    path: '/',
     name: 'Predict',
     component: Predict,
   }

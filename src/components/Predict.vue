@@ -16,6 +16,7 @@
             <VueColumn field="HorseNo" header="HorseNo" ></VueColumn>
             <VueColumn field="Name" header="Name" ></VueColumn>
             <VueColumn field="Predict" header="Predict" ></VueColumn>
+            <VueColumn field="Rank" header="Rank" ></VueColumn>
         </TreeTable>
     </div>
 </template>
@@ -24,7 +25,6 @@
 import { defineComponent, ref } from 'vue';
 import { AxiosBase } from '@/AxiosBase';
 import AxiosResponseClass from '@/class/AxiosResponseClass';
-import {IFPredictTreeNode} from '@/IF/IFPredictTreeNode'
 
 export default defineComponent({
     name: 'HelloWorld',
@@ -52,7 +52,7 @@ export default defineComponent({
             axios.POST({Year: Year, Month: Month, HoldDay: Day})
                     .then((res: AxiosResponseClass) => {
                         predictload.value = true
-                        data.value = res.Data as unknown as IFPredictTreeNode
+                        data.value = res.Data
                         console.log(res.Data)
                         bol.value = true
                     })
