@@ -45,8 +45,8 @@ export default defineComponent({
         const inguiryload = ref(true)
         const data = ref()
 
-        const mindate = ref()
-        const maxdate = ref()
+        // const mindate = ref()
+        // const maxdate = ref()
 
         const bol = ref(false)
         const inquiry = () => {

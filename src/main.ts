@@ -19,7 +19,7 @@ import Ripple from 'primevue/ripple';
 import StyleClass from 'primevue/styleclass';
 import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip';
-
+import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
 import Password from 'primevue/password';
 import InlineMessage from 'primevue/inlinemessage';
@@ -37,6 +37,7 @@ app.use(ConfirmationService);
 app.use(ToastService);
 app.use(router)
 
+app.component('DropDown', Dropdown)
 app.component('InputNumber', InputNumber)
 app.component('InputPassword', Password)
 app.component('InlineMessage', InlineMessage)
