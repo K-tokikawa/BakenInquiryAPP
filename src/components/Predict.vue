@@ -15,6 +15,10 @@
                     </div>
                 </div>
                 <PrimevueButton @click="predict">予測開始</PrimevueButton>
+                <div class="card flex justify-content-center">
+                    <DropDown v-model="selectedRaces" editable :options="optionsRace" placeholder="Select a Race" class="w-full md:w-14rem" />
+                    <PrimevueButton @click="Gettext">印コピー</PrimevueButton>
+                </div>
         </div>
         <div v-else class="card flex justify-content-center">
             <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"
@@ -24,19 +28,22 @@
     <div v-if="bol" class="card">
         <TreeTable :value="data.root">
             <VueColumn field="RaceID" header="RaceID" expander="true"></VueColumn>
-            <VueColumn field="HorseNo" header="HorseNo" ></VueColumn>
+            <VueColumn field="Mark" header="Mark" ></VueColumn>
+            <VueColumn field="HorseNo" header="HorseNo"></VueColumn>
             <VueColumn field="Name" header="Name" ></VueColumn>
-            <VueColumn field="Predict" header="Predict" ></VueColumn>
-            <VueColumn field="Rank" header="Rank" ></VueColumn>
+            <VueColumn field="Predict" header="Predict"></VueColumn>
+            <VueColumn field="Rank" header="Rank"></VueColumn>
         </TreeTable>
     </div>
 </template>
 
 <script lang="ts">
 import Checkbox from 'primevue/checkbox';
+import 'primeicons/primeicons.css';
 import { Ref, defineComponent, ref } from 'vue';
 import { AxiosBase } from '@/AxiosBase';
 import AxiosResponseClass from '@/class/AxiosResponseClass';
+import { IFPredictParentTreeNode, IFResponsePredictParentTreeNode } from '@/IF/IFPredictTreeNode';
 
 export default defineComponent({
     name: 'HelloWorld',
@@ -55,10 +62,13 @@ export default defineComponent({
         const date = new Date()
         const Year = `${date.getFullYear()}`
         const Month = date.getMonth() + 1
-        const Day = date.getDate() + 1
+        const Day = date.getDate()
         const selectedVenue = ref([])
         const selectedRound = ref([])
-
+        const optionsRace: Ref<string[]> = ref([])
+        const selectedRaces = ref()
+        const Racetext: Ref<{
+            [RaceID: string]: string}> = ref({})
         const Venues: Ref<{
             VenueNum: string,
             VenueName: string
@@ -80,19 +90,30 @@ export default defineComponent({
         const axios: AxiosBase = new AxiosBase('http://localhost:9999/GetHoldVenue')
         axios.POST({Year: Year, Month: Month, HoldDay: Day})
             .then((res: AxiosResponseClass) => {
-                console.log(res.Data)
                 Venues.value = res.Data as unknown as []
             })
+        const Gettext = () => {
+            const text = Racetext.value[selectedRaces.value]
+            navigator.clipboard.writeText(text)
+        }
         const predict = () => {
             predictload.value = false
-            console.log(selectedVenue.value)
             const axios: AxiosBase = new AxiosBase('http://localhost:9999/GetRacePredict')
             if (selectedVenue.value.length > 0 && selectedRound.value.length > 0) {
+                optionsRace.value = []
+                Racetext.value = {}
+                selectedRaces.value = ''
                 axios.POST({Year: Year, Month: Month, HoldDay: Day, Venue: selectedVenue.value, Rounds: selectedRound.value})
                     .then((res: AxiosResponseClass) => {
                         predictload.value = true
-                        data.value = res.Data
-                        console.log(res.Data)
+                        data.value = res.Data as unknown as IFPredictParentTreeNode
+                        const resData = res.Data as unknown as IFResponsePredictParentTreeNode
+                        for (const val of Object.keys(resData.root)) {
+                            const RaceID = resData.root[Number(val)].data.RaceID
+                            console.log(RaceID)
+                            optionsRace.value.push(RaceID)
+                            Racetext.value[RaceID] = resData.root[Number(val)].data.text
+                        }
                         bol.value = true
                     })
             }
@@ -105,7 +126,10 @@ export default defineComponent({
             Venues,
             selectedVenue,
             Rounds,
-            selectedRound
+            selectedRound,
+            Gettext,
+            selectedRaces,
+            optionsRace
         }
     }
 
